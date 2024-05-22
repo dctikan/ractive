@@ -503,4 +503,33 @@ export default function() {
     r.toggle('foo');
     r.toggle('bar');
   });
+
+  test('attributes decode entities', t => {
+    new Ractive({
+      target: fixture,
+      template: `<div thing="&amp;thing" />`
+    });
+
+    t.equal(fixture.querySelector('div').getAttribute('thing'), '&thing');
+  });
+
+  test('attributes decode entities in fragments (#3434)', t => {
+    new Ractive({
+      target: fixture,
+      template: `<div thing="&amp;{{{foo}}}&amp;" />`,
+      data: { foo: '&amp;' }
+    });
+
+    t.equal(fixture.querySelector('div').getAttribute('thing'), '&&&');
+  });
+
+  test('attributes decode entities in nested fragments', t => {
+    new Ractive({
+      target: fixture,
+      template: `<div thing="&amp;{{#if foo}}&amp;{{/if}}&amp;" />`,
+      data: { foo: true }
+    });
+
+    t.equal(fixture.querySelector('div').getAttribute('thing'), '&&&');
+  });
 }

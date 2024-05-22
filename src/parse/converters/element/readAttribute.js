@@ -114,10 +114,8 @@ function readAttributeValue(parser) {
 
   if (!value.length) {
     return '';
-  }
-
-  if (value.length === 1 && isString(value[0])) {
-    return decodeCharacterReferences(value[0]);
+  } else if (value.length === 1 && isString(value[0])) {
+    return value[0];
   }
 
   return value;
@@ -142,7 +140,7 @@ function readUnquotedAttributeValueToken(parser) {
     parser.pos = start + text.length;
   }
 
-  return text;
+  return decodeCharacterReferences(text);
 }
 
 function readUnquotedAttributeValue(parser) {
@@ -208,7 +206,7 @@ function readQuotedStringToken(parser, quoteMark) {
   }
 
   parser.pos += index;
-  return haystack.substr(0, index);
+  return decodeCharacterReferences(haystack.substr(0, index));
 }
 
 export function readAttributeOrDirective(parser) {
