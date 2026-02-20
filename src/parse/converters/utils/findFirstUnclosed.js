@@ -1,6 +1,6 @@
 const regExpCache = {};
 
-export function findFirstUnclosed(str, tagName) {
+export default function findFirstUnclosed(str, tagName) {
   const needle = '<\\/?' + tagName;
   const regex = regExpCache[needle] || (regExpCache[needle] = new RegExp(needle, 'g'));
 
