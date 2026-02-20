@@ -16,10 +16,10 @@ export default function readText(parser) {
     barrier = parser.inside ? '</' + parser.inside : '<';
 
     if (parser.inside && !parser.interpolate[parser.inside]) {
-        // to be able to parse the following <div><template><x-a><template></template></x-a></template></div>
-        // we need to locate the first UNCLOSED(unbalanced) tag
-        // so if we have parser.inside="template" and remaining="<x-a><template></template></x-a></template></div>" we should locate the last </template>
-        index = findFirstUnclosed(remaining,parser.inside);
+      // to be able to parse the following <div><template><x-a><template></template></x-a></template></div>
+      // we need to locate the first UNCLOSED(unbalanced) tag
+      // so if we have parser.inside="template" and remaining="<x-a><template></template></x-a></template></div>" we should locate the last </template>
+      index = findFirstUnclosed(remaining, parser.inside);
     } else {
       disallowed = parser.tags.map(t => t.open);
       disallowed = disallowed.concat(parser.tags.map(t => '\\' + t.open));
