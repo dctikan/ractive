@@ -2,7 +2,7 @@ const regExpCache = {};
 
 export function findFirstUnclosed(tagName) {
   const needle="<\\/?" + tagName;
-  const regex = regExpCache[needle] || (regExpCache[needle] = new RegExp(needle, "g");
+  const regex = regExpCache[needle] || (regExpCache[needle] = new RegExp(needle, "g"));
 
   let match;
   let depth = 0;
