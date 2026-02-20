@@ -1,9 +1,8 @@
+const regExpCache = {};
+
 export function findFirstUnclosed(tagName) {
-  // 1. Escape the tag name just in case
-  const escapedTag = tagName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  
-  // 2. Build the Regex dynamically
-  const regex = new RegExp("<\\/?" + escapedTag, "g");
+  const needle="<\\/?" + tagName;
+  const regex = regExpCache[needle] || (regExpCache[needle] = new RegExp(needle, "g");
 
   let match;
   let depth = 0;
