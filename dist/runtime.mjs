@@ -1,7 +1,7 @@
 /*
 	Ractive.js v1.5.0-edge
 	Build: unknown
-	Date: Fri Feb 20 2026 01:44:01 GMT+0000 (Coordinated Universal Time)
+	Date: Fri Feb 20 2026 23:47:14 GMT+0000 (Coordinated Universal Time)
 	Website: https://ractive.js.org
 	License: MIT
 */
