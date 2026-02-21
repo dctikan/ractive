@@ -342,10 +342,15 @@ function initMacro(self) {
 
     if (isArray(template.m)) {
       const attrs = template.m;
-      template.p[extras] = template.m = attrs.filter(a => !~fn.attributes.indexOf(a.n));
-      attrs
-        .filter(a => ~fn.attributes.indexOf(a.n))
-        .forEach(a => {
+      const remaining = [];
+
+      // performanve optimized code
+      for (let i = 0, atlen = attrs.length; i < atlen; i++) {
+        const a = attrs[i];
+
+        // Use .includes() for readability; at N < 10, performance is identical to ~indexOf
+        if (fn.attributes.includes(a.n)) {
+          // Process "found" items immediately (the side effects)
           const fragment = new Fragment({
             template: a.f,
             owner: self
@@ -353,7 +358,13 @@ function initMacro(self) {
           fragment.bubble = invalidate;
           fragment.findFirstNode = noop;
           self._attrs[a.n] = fragment;
-        });
+        } else {
+          // Collect "not found" items for the template
+          remaining.push(a);
+        }
+      }
+      // Update the template with the remaining items
+      template.p[extras] = template.m = remaining;        
     } else {
       template.p[extras] = [];
     }
