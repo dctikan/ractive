@@ -1,7 +1,7 @@
 /*
 	Ractive.js v1.5.0-edge
 	Build: unknown
-	Date: Fri Feb 20 2026 23:47:14 GMT+0000 (Coordinated Universal Time)
+	Date: Sat Feb 21 2026 02:32:40 GMT+0000 (Coordinated Universal Time)
 	Website: https://ractive.js.org
 	License: MIT
 */
@@ -12836,18 +12836,29 @@ function initMacro(self) {
 
     if (isArray(template.m)) {
       var attrs = template.m;
-      template.p[extras] = template.m = attrs.filter(function (a) { return !~fn.attributes.indexOf(a.n); });
-      attrs
-        .filter(function (a) { return ~fn.attributes.indexOf(a.n); })
-        .forEach(function (a) {
-          var fragment = new Fragment({
+      var remaining = [];
+
+      // performanve optimized code
+      for (var i = 0, atlen = attrs.length; i < atlen; i++) {
+        var a = attrs[i];
+
+        // Use .includes() for readability; at N < 10, performance is identical to ~indexOf
+        if (fn.attributes.includes(a.n)) {
+          // Process "found" items immediately (the side effects)
+          var fragment$1 = new Fragment({
             template: a.f,
             owner: self
           });
-          fragment.bubble = invalidate;
-          fragment.findFirstNode = noop;
-          self._attrs[a.n] = fragment;
-        });
+          fragment$1.bubble = invalidate;
+          fragment$1.findFirstNode = noop;
+          self._attrs[a.n] = fragment$1;
+        } else {
+          // Collect "not found" items for the template
+          remaining.push(a);
+        }
+      }
+      // Update the template with the remaining items
+      template.p[extras] = template.m = remaining;        
     } else {
       template.p[extras] = [];
     }
